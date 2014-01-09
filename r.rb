@@ -7,6 +7,8 @@ class R < Formula
   head 'https://svn.r-project.org/R/trunk'
 
   option 'without-check', 'Skip build-time tests (not recommended)'
+  option 'enable-R-shlib', "Build the shared/dynamic library 'libR'"
+  option 'enable-R-static-lib', "Build the static library 'libR.a'"
 
   depends_on :fortran
   depends_on 'readline'
@@ -37,6 +39,9 @@ class R < Formula
 
     args << '--with-lapack' + ((build.with? 'openblas') ? '=-lopenblas' : '')
     args << '--with-blas=-lopenblas' if build.with? 'openblas'
+
+    args << '--enable-R-shlib' if build.include? 'enable-R-shlib'
+    args << '--enable-R-static-lib' if build.include? 'enable-R-static-lib'
 
     # Pull down recommended packages if building from HEAD.
     system './tools/rsync-recommended' if build.head?
